@@ -19,19 +19,19 @@ inputs = torch.from_numpy(X.astype(np.float32))
 targets = torch.from_numpy(Y.astype(np.float32))
 
 n_epochs = 60
-loses = []
+losses = []
 for it in range(n_epochs):
     optimizer.zero_grad()
 
     outputs = model(inputs)
     loss = criterion(outputs, targets)
-    loses.append(loss.item())
+    losses.append(loss.item())
 
     loss.backward()
     optimizer.step()
     print(f'Epoch {it+1}/{n_epochs}, Loss {loss.item(): .4f}')
 
-# plt.plot(loses)
+# plt.plot(losses)
 # plt.show()
 
 # w = model.weight.data.numpy()
