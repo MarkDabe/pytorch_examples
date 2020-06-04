@@ -21,10 +21,9 @@ N, D = X_train.shape
 
 model = nn.Sequential(
     nn.Linear(D,1),
-    nn.Sigmoid()
 )
 
-criterion = nn.BCELoss()
+criterion = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.Adam(model.parameters())
 
 X_train = torch.from_numpy(X_train.astype(np.float32))
@@ -64,14 +63,14 @@ for it in range(n_epochs):
 # plt.show()
 
 with torch.no_grad():
-    training_probs = model(X_train)
-    training_results = np.round(training_probs.numpy())
+    training_outputs = model(X_train)
+    training_results = (training_outputs.numpy() > 0)
     training_accuracy = np.mean([training_results == Y_train.numpy()])
 
-    testing_probs = model(X_test)
-    testing_results = np.round(testing_probs.numpy())
+    testing_outputs = model(X_test)
+    testing_results = np.round(testing_outputs.numpy() > 0)
     testing_accuracy = np.mean([testing_results == Y_test.numpy()])
 
     print(f'Training Accuracy {training_accuracy: .4f}, Test Accuracy {testing_accuracy: .4f}')
 
-torch.save(model.state_dict(), 'breastcancer.pt')
+torch.save(model.state_dict(), 'breastcancer_improved.pt')
